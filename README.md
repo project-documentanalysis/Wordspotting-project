@@ -1,1 +1,1 @@
-# patch-project
+# Projekt: Wordspotting (segmentierungsfrei - patchbasierter Ansatz
