@@ -6,7 +6,7 @@
 3. Extrahieren Sie Patches zu jeder Anfrage.
 4. Bestimmen Sie mean Average Precision und mean Recall
    (Uberlappschwellwert).
-5. Fuhren Sie eine Parameterevaluierung durch.
+5. Fuehren Sie eine Parameterevaluierung durch.
 
-##### Optional: Fuhren Sie die Evaluierung auf dem kompletten Datensatz durch (alle Seiten).
+##### Optional: Fuehren Sie die Evaluierung auf dem kompletten Datensatz durch (alle Seiten).
 
