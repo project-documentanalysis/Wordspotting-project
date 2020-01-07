@@ -13,15 +13,16 @@ def patch_wordspotting():
     image = Image.open(document_image_filename)
     im_arr = np.asarray(image, dtype='float32')
     plt.imshow(im_arr, cmap=cm.get_cmap('Greys_r'))
-    selectSIFT(5, 5, im_arr)
+    vocab, labels = selectSIFT(15, 15, im_arr, 40)
     plt.show()
 
-def selectSIFT(step_size, cell_size, im_arr):
+    coord_word_dict = readFrom_Coord_Word_file('2700270.gtp')
+
+def selectSIFT(step_size, cell_size, im_arr, centroids):
     pickle_densesift_fn = '2700270-full_dense-%d_sift-%d_descriptors.p' % (step_size, cell_size)
     frames, desc = pickle.load(open(pickle_densesift_fn, 'rb'))
 
-    n_centroids = 40
-    _, labels = kmeans2(desc, n_centroids, iter=20, minit='points')
+    vocab, labels = kmeans2(desc, centroids, iter=20, minit='points')
 
     #Kommentar
 
@@ -33,7 +34,7 @@ def selectSIFT(step_size, cell_size, im_arr):
     colormap = cm.get_cmap('jet')
     desc_len = cell_size * 4
     for (x, y), label in zip(frames, labels):
-        color = colormap(label / float(n_centroids))
+        color = colormap(label / float(centroids))
         circle = Circle((x, y), radius=1, fc=color, ec=color, alpha=1)
         rect = Rectangle((x - desc_len / 2, y - desc_len / 2), desc_len, desc_len, alpha=0.08, lw=1)
         ax.add_patch(circle)
@@ -46,8 +47,25 @@ def selectSIFT(step_size, cell_size, im_arr):
                 ax.add_line(line_h)
                 ax.add_line(line_v)
         ax.add_patch(rect)
-
     plt.show()
+    return vocab, labels
+
+def readFrom_Coord_Word_file(file):
+    coord_word_list = file
+    with open(coord_word_list) as f:
+        content = f.readlines()
+    content = [x.strip() for x in content]
+    print("Liste" + str(content))
+    coord_word_dict = {}
+    for val in content:
+        x1, y1, x2, y2, word = val.split()
+        coord_word_dict[word]=((int(x1), int(y1)), (int(x2), int(y2)))
+    print("Dictionary: " + str(coord_word_dict))
+    return coord_word_dict
+
+#def selectPatch():
+
+#def bag_of_features():
 
 if __name__ == '__main__':
     patch_wordspotting()
